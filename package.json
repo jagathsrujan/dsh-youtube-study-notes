@@ -1,6 +1,6 @@
 {
   "name": "dsh-youtube-study-notes",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Turn a YouTube link into study notes: pulls the video's own captions, optionally reads on-screen content with a vision model, then asks for your own notes and merges everything into one document.",
   "keywords": [
     "dsh",

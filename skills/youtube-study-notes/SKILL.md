@@ -25,6 +25,7 @@ own observations woven into verified on-screen content are not. **Never skip ste
 | 4 | **Ask the user for their notes** | do not write notes before this |
 | 5 | Merge all three sources | — |
 | 6 | Save and report the path | — |
+| 7 | Clean up derived media | keep the transcript, drop the frames |
 
 Paths below are **relative to this skill's base directory**, which the skill system
 reports when the skill loads. Resolve them against that directory before use; do not
@@ -169,14 +170,42 @@ Follow `references/notes-template.md` for structure and its rules.
 Write `<out>/notes.md` beside the transcript, then tell the user the path and surface the
 file. Lead your reply with the TL;DR, not with a description of what you did.
 
+## 7. Clean up
+
+The frame JPEGs are derived from someone else's video and are the large part of the
+footprint — typically tens of megabytes for a frame set, against a few kilobytes of
+transcript. Once `notes.md` exists they have done their job: the notes carry the
+on-screen text **verbatim**, so the information survives without the pixels.
+
+```bash
+python3 scripts/cleanup.py "<out>"
+```
+
+This removes `<out>/frames/` and any video or audio file left under `<out>`, and keeps
+`transcript.md`, `transcript.txt`, `meta.json` and `notes.md`. It refuses to act on a
+directory that does not carry one of those markers, so it cannot be pointed at an
+unrelated folder by mistake. It prints a JSON summary of what it removed and how many
+bytes it freed.
+
+- Run it **after** `notes.md` is written, never before — and never between the visual
+  pass and the merge.
+- **Ask before keeping frames instead.** If the user wants to review the stills
+  themselves, pass `--keep-frames`, or skip this step for that run.
+- The full video is already gone: step 3 downloads it into a temporary directory that is
+  deleted when the script exits, and `--keep-video` is the only way it survives. If a
+  video file is present, `cleanup.py` removes it too.
+- Mention what you cleaned up and how much it freed. Do not delete anything silently.
+
 ---
 
 ## Operational notes
 
 - **yt-dlp breaks periodically** when YouTube changes. Symptom: exit 4 with an extractor
   error. Fix: upgrade yt-dlp.
-- **Keep the transcript.** It is the evidence for every claim and lets the user re-run the
-  merge without re-downloading.
+- **Keep the transcript, drop the frames.** The transcript is a few kilobytes and is the
+  evidence for every spoken claim, so it stays; the frames are tens of megabytes of
+  someone else's pixels, so step 7 removes them. Keeping `transcript.md` also lets the
+  merge be re-run without downloading anything again.
 - **Frame cost scales with length.** `--max-frames` caps it (default 48). A one-hour talk
   with slides is well served by 40–60 frames; a 10-minute code demo may need fewer but at
   higher resolution.

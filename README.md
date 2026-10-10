@@ -16,6 +16,24 @@ The middle step is the point. Every other video-to-notes tool produces the same 
 | 4 | **Ask** — the agent stops and asks what *you* noticed, in your words. Type it or dictate it. |
 | 5 | **Merge** — transcript + on-screen evidence + your observations, into one markdown file. |
 | 6 | **Save** — `notes.md`, written beside the transcript so the evidence stays with it. |
+| 7 | **Clean up** — the frame stills and any video file are removed; the transcript stays. |
+
+### What it leaves on disk
+
+The video is never kept: step 3 downloads it into a temporary directory that is deleted
+when the script exits (`--keep-video` is the only way it survives). The frame JPEGs are
+removed by step 7 once `notes.md` exists — they are derived from someone else's video and
+are typically tens of megabytes, against a few kilobytes of transcript.
+
+Kept, because it is the evidence behind every spoken claim and costs almost nothing:
+
+```
+transcript.md  transcript.txt  meta.json  notes.md
+```
+
+`cleanup.py` refuses to act on a directory that does not carry one of those markers, so
+it cannot be pointed at an unrelated folder. Pass `--keep-frames` to review the stills
+yourself.
 
 ## Install
 
@@ -119,7 +137,7 @@ cordis.patch.yml      inserts one @deepseek-ai/dsh-skill-filesystem row
 lib/index.js          resolveSkillRoot() — resolves skills/ from the profile's own module identity
 skills/youtube-study-notes/
   SKILL.md            the workflow
-  scripts/            yt_transcript.py, video_frames.py
+  scripts/            yt_transcript.py, video_frames.py, cleanup.py
   references/         notes template and merge rules
 ```
 
