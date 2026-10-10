@@ -1,0 +1,47 @@
+{
+  "name": "dsh-youtube-study-notes",
+  "version": "0.1.0",
+  "description": "Turn a YouTube link into study notes: pulls the video's own captions, optionally reads on-screen content with a vision model, then asks for your own notes and merges everything into one document.",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "youtube",
+    "study-notes",
+    "transcript",
+    "captions",
+    "yt-dlp",
+    "skill",
+    "workflow"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "main": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "skills",
+    "README.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jagathsrujan/dsh-youtube-study-notes.git"
+  },
+  "homepage": "https://github.com/jagathsrujan/dsh-youtube-study-notes#readme",
+  "bugs": {
+    "url": "https://github.com/jagathsrujan/dsh-youtube-study-notes/issues"
+  }
+}

@@ -1,0 +1,17 @@
+# Opt-in filesystem skill provider for dsh-youtube-study-notes.
+#
+# Mounts only the `skills/` directory this package ships, as an isolated provider:
+# `includeDefaultRoots: false` keeps the project and user skill roots out of this
+# provider, so installing the bundle contributes exactly one skill and cannot
+# shadow or reorder anything the user already has.
+#
+# The skill root is resolved from the DSH profile's own module resolution (the
+# Loader's `baseUrl`) via the package's npm identity — never as a path
+# concatenated onto `baseUrl`, which would break for hoisted and linked installs.
+- insert:
+    - id: youtube-study-notes-skill-filesystem
+      name: '@deepseek-ai/dsh-skill-filesystem'
+      config:
+        providerName: youtube-study-notes-plugin
+        includeDefaultRoots: false
+        bundledSkillDir: !!js process.getBuiltinModule('node:path').join(process.getBuiltinModule('node:path').dirname(process.getBuiltinModule('node:module').createRequire(baseUrl).resolve('dsh-youtube-study-notes/package.json')), 'skills')
